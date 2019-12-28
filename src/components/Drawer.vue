@@ -17,11 +17,11 @@
 
     <v-list dense nav>
       <v-list-item-group color="primary">
-        <v-list-item v-for="item in items" :key="item.title" link @click.right="show">
+        <v-list-item v-for="api in apis" :key="api.id" link @click.right="show">
           <v-list-item-icon>GET</v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-            <v-list-item-subtitle>https://www.bilibili.com/bangumi/play/ep136326?from=search&seid=14265199998534584231</v-list-item-subtitle>
+            <v-list-item-title>{{ api.title }}</v-list-item-title>
+            <v-list-item-subtitle>{{ api.url }}</v-list-item-subtitle>
           </v-list-item-content>
 
           <v-list-item-action>
@@ -62,8 +62,12 @@
 <script>
 export default {
   name: 'Drawer',
+  mounted () {
+    this.apis = this.$db.read().get('apis').value()
+  },
   data () {
     return {
+      apis: [],
       items: [
         { title: '获取个人信息', method: 'GET', 'url': 'https://www.bilibili.com/api/userProfile' },
         { title: '获取视频封面', method: 'POST', 'url': 'https://www.bilibili.com/api/thumb/hello' }
