@@ -1,24 +1,32 @@
 <template>
   <v-navigation-drawer app permanent>
-    <v-list>
-      <v-list-item link>
-        <v-list-item-content>
-          <v-list-item-title class="title">B站相关接口</v-list-item-title>
-          <v-list-item-subtitle>https://www.bilibili.com</v-list-item-subtitle>
-        </v-list-item-content>
+    <template v-slot:prepend>
+      <v-list>
+        <v-list-item link>
+          <v-list-item-content>
+            <v-list-item-title class="title">B站相关接口</v-list-item-title>
+            <v-list-item-subtitle>https://www.bilibili.com</v-list-item-subtitle>
+          </v-list-item-content>
 
-        <v-list-item-action>
-          <v-icon>mdi-menu-down</v-icon>
-        </v-list-item-action>
-      </v-list-item>
-    </v-list>
+          <v-list-item-action>
+            <v-icon>mdi-menu-down</v-icon>
+          </v-list-item-action>
+        </v-list-item>
+      </v-list>
+    </template>
 
     <v-divider></v-divider>
 
     <v-text-field label="Filter" dense clearable></v-text-field>
     <v-list dense nav>
       <v-list-item-group>
-        <v-list-item v-for="api in apis" :key="api.id" link @click.right="show">
+        <v-list-item
+          v-for="api in apis"
+          :key="api.id"
+          link
+          :to="{ name: 'main', params: { apiId: api.id, api: api }}"
+          @click.right="show($event, api.id)"
+        >
           <v-list-item-icon>GET</v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>{{ api.title }}</v-list-item-title>
@@ -26,7 +34,7 @@
           </v-list-item-content>
 
           <v-list-item-action>
-            <v-btn icon @click.stop="show">
+            <v-btn icon @click.stop="show($event, api.id)">
               <v-icon>mdi-menu-down</v-icon>
             </v-btn>
           </v-list-item-action>
@@ -49,7 +57,7 @@
             </v-list-item-icon>
             <v-list-item-title>Rename</v-list-item-title>
           </v-list-item>
-          <v-list-item>
+          <v-list-item @click="deleteApi">
             <v-list-item-icon>
               <v-icon>mdi-trash-can-outline</v-icon>
             </v-list-item-icon>
@@ -100,6 +108,7 @@ export default {
     return {
       dialog: false,
       newRequestName: '',
+      currentActionApiId: '',
       apis: [],
       showMenu: false,
       x: 0,
@@ -120,8 +129,14 @@ export default {
       this.apis = this.$db.read().get('apis').value()
       this.dialog = false
     },
-    show (e) {
+    deleteApi () {
+      console.log('delete api: ' + this.currentActionApiId)
+      this.$db.get('apis').remove({ id: this.currentActionApiId }).write()
+      this.apis = this.$db.read().get('apis').value()
+    },
+    show (e, apiId) {
       e.preventDefault()
+      this.currentActionApiId = apiId
       this.showMenu = false
       this.x = e.clientX
       this.y = e.clientY

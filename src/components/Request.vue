@@ -1,43 +1,65 @@
 <template>
-  <a-layout>
-    <a-layout-content>
-      <a-row>
-        <a-col :span="22">
-          <a-input defaultValue="mysite">
-            <a-select slot="addonBefore" defaultValue="GET">
-              <a-select-option value="GET">GET</a-select-option>
-              <a-select-option value="POST">POST</a-select-option>
-            </a-select>
-          </a-input>
-        </a-col>
-        <a-col :span="2">
-          <a-button  type="primary" icon="thunderbolt"></a-button>
-        </a-col>
-      </a-row>
-      <div style="width: 100%">
-        <a-tabs defaultActiveKey="1" :tabPosition="mode" :style="{ height: '200px'}">
-          <a-tab-pane tab="Header" key="header">
+  <div>
+    <v-toolbar dense>
+      <v-select
+        v-model="api.method"
+        dense
+        hide-details
+        :menu-props="{ maxHeight: '400' }"
+        :items="items"
+        :style="{flex: '0 0 100px'}"
+      ></v-select>
+      <v-text-field v-model="api.url" dense hide-details single-line :style="{fontSize: '13px'}"></v-text-field>
 
-          </a-tab-pane>
-          <a-tab-pane tab="Body" key="body">Body</a-tab-pane>
-          <a-tab-pane tab="Auth" key="auth">Content of tab 3</a-tab-pane>
-          <a-tab-pane tab="Depencency" key="depencency">Content of tab 4</a-tab-pane>
-          <a-tab-pane tab="Docs" key="docs">docs</a-tab-pane>
-          <a-tab-pane tab="Tab 6" key="6">Content of tab 6</a-tab-pane>
-          <a-tab-pane tab="Tab 7" key="7">Content of tab 7</a-tab-pane>
-          <a-tab-pane tab="Tab 8" key="8">Content of tab 8</a-tab-pane>
-          <a-tab-pane tab="Tab 9" key="9">Content of tab 9</a-tab-pane>
-          <a-tab-pane tab="Tab 10" key="10">Content of tab 10</a-tab-pane>
-          <a-tab-pane tab="Tab 11" key="11">Content of tab 11</a-tab-pane>
-        </a-tabs>
-      </div>
-    </a-layout-content>
-  </a-layout>
+      <v-btn icon>
+        <v-icon>mdi-send</v-icon>
+      </v-btn>
+    </v-toolbar>
+    <v-tabs centered center-active slider-size="2" height="30px">
+      <v-tab v-for="item in tabItems" :key="item">{{item}}</v-tab>
+
+      <v-tab-item v-for="item in items" :key="item">
+        <v-container>
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-text-field label="header" required></v-text-field>
+            </v-col>
+
+            <v-col cols="12" md="6">
+              <v-text-field label="value" required></v-text-field>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-tab-item>
+    </v-tabs>
+  </div>
 </template>
 
 <script>
 export default {
-
+  methods: {
+  },
+  watch: {
+    '$route' (to, from) {
+      console.log(to)
+      this.api = to.params.api
+    }
+  },
+  data () {
+    return {
+      api: {},
+      tabItems: ['Header', 'Body', 'Auth', 'Dependencies', 'Docs', 'Settings'],
+      items: [
+        'GET',
+        'POST',
+        'PUT',
+        'DELETE',
+        'PATCH',
+        'HEAD',
+        'OPTIONS'
+      ]
+    }
+  }
 }
 </script>
 
