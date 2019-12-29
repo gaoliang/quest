@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/:apiId',
+    path: '/:requestId',
     name: 'main',
     component: Main
   },

@@ -13,28 +13,27 @@
           </v-list-item-action>
         </v-list-item>
       </v-list>
+      <v-text-field label="Filter" dense clearable></v-text-field>
     </template>
+    <!-- <v-divider></v-divider> -->
 
-    <v-divider></v-divider>
-
-    <v-text-field label="Filter" dense clearable></v-text-field>
-    <v-list dense nav>
+    <v-list dense>
       <v-list-item-group>
         <v-list-item
-          v-for="api in apis"
-          :key="api.id"
+          v-for="request in requests"
+          :key="request.id"
           link
-          :to="{ name: 'main', params: { apiId: api.id, api: api }}"
-          @click.right="show($event, api.id)"
+          :to="{ name: 'main', params: { requestId: request.id, request: request }}"
+          @click.right="show($event, request.id)"
         >
           <v-list-item-icon>GET</v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>{{ api.title }}</v-list-item-title>
-            <v-list-item-subtitle>{{ api.url }}</v-list-item-subtitle>
+            <v-list-item-title>{{ request.title }}</v-list-item-title>
+            <v-list-item-subtitle>{{ request.url }}</v-list-item-subtitle>
           </v-list-item-content>
 
           <v-list-item-action>
-            <v-btn icon @click.stop="show($event, api.id)">
+            <v-btn icon @click.stop="show($event, request.id)">
               <v-icon>mdi-menu-down</v-icon>
             </v-btn>
           </v-list-item-action>
@@ -57,7 +56,7 @@
             </v-list-item-icon>
             <v-list-item-title>Rename</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="deleteApi">
+          <v-list-item @click="deleteRequest">
             <v-list-item-icon>
               <v-icon>mdi-trash-can-outline</v-icon>
             </v-list-item-icon>
@@ -102,14 +101,14 @@
 export default {
   name: 'Drawer',
   mounted () {
-    this.apis = this.$db.read().get('apis').value()
+    this.requests = this.$db.read().get('requests').value()
   },
   data () {
     return {
       dialog: false,
       newRequestName: '',
-      currentActionApiId: '',
-      apis: [],
+      currentActionRequestId: '',
+      requests: [],
       showMenu: false,
       x: 0,
       y: 0,
@@ -124,19 +123,19 @@ export default {
   },
   methods: {
     createNewRequest () {
-      this.$db.read().get('apis').insert({ title: this.newRequestName }).write()
+      this.$db.read().get('requests').insert({ title: this.newRequestName }).write()
       this.newRequestName = ''
-      this.apis = this.$db.read().get('apis').value()
+      this.requests = this.$db.read().get('requests').value()
       this.dialog = false
     },
-    deleteApi () {
-      console.log('delete api: ' + this.currentActionApiId)
-      this.$db.get('apis').remove({ id: this.currentActionApiId }).write()
-      this.apis = this.$db.read().get('apis').value()
+    deleteRequest () {
+      console.log('delete request: ' + this.currentActionRquestId)
+      this.$db.get('requests').remove({ id: this.currentActionRequestId }).write()
+      this.requests = this.$db.read().get('requests').value()
     },
-    show (e, apiId) {
+    show (e, requestId) {
       e.preventDefault()
-      this.currentActionApiId = apiId
+      this.currentActionRequestId = requestId
       this.showMenu = false
       this.x = e.clientX
       this.y = e.clientY

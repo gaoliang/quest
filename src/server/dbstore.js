@@ -23,8 +23,8 @@ if (!db.has('groups').value()) {
   db.set('groups', []).write()
 }
 
-if (!db.has('apis').value()) {
-  db.set('apis', []).write()
+if (!db.has('requests').value()) {
+  db.set('requests', []).write()
 }
 
 export default db

@@ -3,7 +3,7 @@
   <v-container fluid :style="{padding: 0}">
     <v-row no-gutters>
       <v-col cols="6">
-        <request ref="request" />
+        <request-panel ref="request" />
       </v-col>
       <v-col cols="6">
         <v-toolbar dense></v-toolbar>
@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import Request from '@/components/Request'
+import RequestPanel from '@/components/RequestPanel'
 export default {
   components: {
-    Request
+    RequestPanel
   }
 }
 </script>
