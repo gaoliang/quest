@@ -9,14 +9,20 @@
         :items="items"
         :style="{flex: '0 0 100px'}"
       ></v-select>
-      <v-text-field v-model="request.url" dense hide-details single-line :style="{fontSize: '13px'}"></v-text-field>
+      <v-text-field
+        v-model="request.url"
+        dense
+        hide-details
+        single-line
+        :style="{fontSize: '13px'}"
+      ></v-text-field>
 
       <v-btn icon>
         <v-icon>mdi-send</v-icon>
       </v-btn>
     </v-toolbar>
     <v-tabs show-arrows>
-      <v-tab v-for="item in tabItems" :key="item">{{item}}</v-tab>
+      <v-tab v-for="item in tabItems" :key="item" class="px-2">{{item}}</v-tab>
 
       <v-tab-item v-for="item in items" :key="item">
         <v-container>
@@ -43,6 +49,7 @@ export default {
     '$route' (to, from) {
       console.log(to)
       this.request = to.params.request
+      console.log(to.params.requests)
     }
   },
   data () {

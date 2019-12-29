@@ -13,6 +13,7 @@
           </v-list-item-action>
         </v-list-item>
       </v-list>
+
       <v-text-field label="Filter" dense clearable></v-text-field>
     </template>
     <!-- <v-divider></v-divider> -->
@@ -22,17 +23,24 @@
         <v-list-item
           v-for="request in requests"
           :key="request.id"
-          link
-          :to="{ name: 'main', params: { requestId: request.id, request: request }}"
+          :to="{ name: 'main', params: { requestId: request.id, request,  requests }}"
           @click.right="show($event, request.id)"
+          class="px-2"
         >
-          <v-list-item-icon>GET</v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>{{ request.title }}</v-list-item-title>
-            <v-list-item-subtitle>{{ request.url }}</v-list-item-subtitle>
+            <v-list-item-title>
+              <span v-if="changedRequest.has(request.id)">
+●
+              </span>
+              {{ request.title }}
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              <v-chip color="green" text-color="white" x-small>{{request.method}}</v-chip>
+              {{ request.url }}
+            </v-list-item-subtitle>
           </v-list-item-content>
 
-          <v-list-item-action>
+          <v-list-item-action class="ma-0">
             <v-btn icon @click.stop="show($event, request.id)">
               <v-icon>mdi-menu-down</v-icon>
             </v-btn>
@@ -102,6 +110,21 @@ export default {
   name: 'Drawer',
   mounted () {
     this.requests = this.$db.read().get('requests').value()
+    this.savedRequest = this.$db.read().get('requests').value()
+  },
+  computed: {
+    // 从上次读取开始发生了变化的request id
+    changedRequest () {
+      const set1 = new Set([])
+      for (let index = 0; index < this.requests.length; index++) {
+        const element = this.requests[index]
+        const savedElement = this.savedRequest[index]
+        if (JSON.stringify(element) !== JSON.stringify(savedElement)) {
+          set1.add(element.id)
+        }
+      }
+      return set1
+    }
   },
   data () {
     return {
