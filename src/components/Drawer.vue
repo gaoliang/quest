@@ -106,7 +106,6 @@
 
 <script>
 let _ = require('lodash')
-
 export default {
   name: 'Drawer',
   mounted () {
