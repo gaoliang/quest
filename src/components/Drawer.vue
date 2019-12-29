@@ -24,7 +24,7 @@
           v-for="request in requests"
           :key="request.id"
           :to="{ name: 'main', params: { requestId: request.id, request,  requests }}"
-          @click.right="show($event, request.id)"
+          @click.right="show($event, request)"
           @dblclick="saveRequest(request)"
           class="px-2"
         >
@@ -131,7 +131,7 @@ export default {
     return {
       dialog: false,
       newRequestName: '',
-      currentActionRequestId: '',
+      currentMenuRequest: {},
       requests: [],
       savedRequest: [],
       showMenu: false,
@@ -159,13 +159,14 @@ export default {
       this.savedRequest = this.$db.read().get('requests').value()
     },
     deleteRequest () {
-      console.log('delete request: ' + this.currentActionRquestId)
-      this.$db.get('requests').remove({ id: this.currentActionRequestId }).write()
-      this.requests = this.$db.read().get('requests').value()
+      console.log('delete request: ' + this.currentMenuRequest)
+      _.remove(this.requests, this.currentMenuRequest)
+      this.$db.get('requests').remove({ id: this.currentMenuRequest.id }).write()
+      this.savedRequest = this.$db.read().get('requests').value()
     },
-    show (e, requestId) {
+    show (e, request) {
       e.preventDefault()
-      this.currentActionRequestId = requestId
+      this.currentMenuRequest = request
       this.showMenu = false
       this.x = e.clientX
       this.y = e.clientY
