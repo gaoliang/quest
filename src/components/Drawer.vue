@@ -152,7 +152,7 @@ export default {
   },
   methods: {
     createNewRequest () {
-      this.$db.read().get('requests').insert({ title: this.newRequestName, method: 'GET', headers: [{ 'name': 'User-Agent', 'value': 'Quest' }] }).write()
+      this.$db.read().get('requests').insert({ title: this.newRequestName, method: 'GET', headers: [{ 'name': 'User-Agent', 'value': 'Quest' }], body: { type: '', value: '' } }).write()
       this.newRequestName = ''
       this.requests = this.$db.read().get('requests').value()
       this.dialog = false

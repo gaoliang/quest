@@ -54,7 +54,15 @@
               </v-tab-item>
 
               <v-tab-item key="body">
-                <v-container>this is body</v-container>
+                <v-container>
+                  <editor
+                    v-model="request.body.value"
+                    @init="editorInit"
+                    lang="json"
+                    theme="tomorrow_night_eighties"
+                    height="100"
+                  ></editor>
+                </v-container>
               </v-tab-item>
             </v-tabs>
           </v-card>
@@ -67,6 +75,10 @@
 <script>
 
 export default {
+  components: {
+    editor: require('vue2-ace-editor')
+
+  },
   watch: {
     '$route' (to, from) {
       console.log(to)
@@ -75,6 +87,14 @@ export default {
     }
   },
   methods: {
+    editorInit: function () {
+      require('brace/ext/language_tools') // language extension prerequsite...
+      require('brace/mode/html')
+      require('brace/mode/json') // language
+      require('brace/mode/less')
+      require('brace/theme/tomorrow_night_eighties')
+      require('brace/snippets/json') // snippet
+    },
     addHeader () {
       this.request.headers.push({ 'name': '', 'value': '' })
     },
