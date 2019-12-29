@@ -7,10 +7,11 @@
       </v-col>
       <v-col cols="6">
         <v-toolbar dense>
-          <v-chip class="ma-2" color="green" text-color="white">
+          <v-chip class="ma-2" color="green" text-color="white" v-if="request.response">
             <v-avatar left>
               <v-icon>mdi-checkbox-marked-circle</v-icon>
-            </v-avatar>200 Success
+            </v-avatar>
+            {{ request.response.status }} {{request.response.statusText}}
           </v-chip>
         </v-toolbar>
       </v-col>
@@ -21,8 +22,20 @@
 <script>
 import RequestPanel from '@/components/RequestPanel'
 export default {
+  watch: {
+    '$route' (to, from) {
+      console.log(to)
+      this.request = to.params.request
+      console.log(to.params.requests)
+    }
+  },
   components: {
     RequestPanel
+  },
+  data () {
+    return {
+      request: {}
+    }
   }
 }
 </script>

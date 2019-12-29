@@ -17,7 +17,7 @@
         :style="{fontSize: '13px'}"
       ></v-text-field>
 
-      <v-btn icon>
+      <v-btn icon @click="doRequest">
         <v-icon>mdi-send</v-icon>
       </v-btn>
     </v-toolbar>
@@ -80,6 +80,16 @@ export default {
     },
     deleteHeader (index) {
       this.request.headers.splice(index, 1)
+    },
+    doRequest () {
+      let that = this
+      this.$axios({
+        method: this.request.method,
+        url: this.request.url
+      }).then(response => {
+        console.log(response)
+        that.$set(that.request, 'response', response)
+      })
     }
   },
   data () {

@@ -120,7 +120,11 @@ export default {
       for (let index = 0; index < this.requests.length; index++) {
         const element = this.requests[index]
         const savedElement = this.savedRequest[index]
-        if (!_.isEqual(element, savedElement)) {
+        var isEqual = _.isEqual(
+          _.omit(element, ['response']),
+          _.omit(savedElement, ['response'])
+        )
+        if (!isEqual) {
           set1.add(element.id)
         }
       }
