@@ -21,39 +21,46 @@
         <v-icon>mdi-send</v-icon>
       </v-btn>
     </v-toolbar>
-    <v-tabs show-arrows>
-      <v-tab key="headers" class="px-2">Header</v-tab>
-      <v-tab key="body" class="px-2">Body</v-tab>
 
-      <v-tab-item key="headers">
-        <v-container>
-          <v-row v-for="(header, index) in request.headers" :key="index">
-            <v-col cols="12" md="6" class="py-0">
-              <v-combobox :items="items" label="name" hide-details :value="header.name"></v-combobox>
-            </v-col>
-            <v-col cols="12" md="6" class="py-0">
-              <v-text-field
-                label="value"
-                required
-                hide-details
-                v-model="header.value"
-                append-outer-icon="mdi-delete"
-                @click:append-outer="deleteHeader(index)"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <div class="text-center pt-4">
-            <v-btn small color="primary" @click="addHeader">Add Header</v-btn>
-          </div>
-        </v-container>
-      </v-tab-item>
+    <v-container fluid>
+      <v-row dense>
+        <v-col :cols="12">
+          <v-card>
+            <v-tabs show-arrows class="pt-2 pl-2 pr-2">
+              <v-tab key="headers" class="px-2">Header</v-tab>
+              <v-tab key="body" class="px-2">Body</v-tab>
 
-      <v-tab-item key="body">
-        <v-container>
-          this is body
-        </v-container>
-      </v-tab-item>
-    </v-tabs>
+              <v-tab-item key="headers">
+                <v-container>
+                  <v-row v-for="(header, index) in request.headers" :key="index">
+                    <v-col cols="12" md="6" class="py-0">
+                      <v-combobox :items="items" label="name" hide-details :value="header.name"></v-combobox>
+                    </v-col>
+                    <v-col cols="12" md="6" class="py-0">
+                      <v-text-field
+                        label="value"
+                        required
+                        hide-details
+                        v-model="header.value"
+                        append-outer-icon="mdi-delete"
+                        @click:append-outer="deleteHeader(index)"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <div class="text-center pt-4">
+                    <v-btn small color="primary" @click="addHeader">Add Header</v-btn>
+                  </div>
+                </v-container>
+              </v-tab-item>
+
+              <v-tab-item key="body">
+                <v-container>this is body</v-container>
+              </v-tab-item>
+            </v-tabs>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 

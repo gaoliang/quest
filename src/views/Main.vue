@@ -2,11 +2,17 @@
   <!-- Provides the application the proper gutter -->
   <v-container fluid :style="{padding: 0}">
     <v-row no-gutters>
-      <v-col cols="6">
+      <v-col cols="6" class="pr-2">
         <request-panel ref="request" />
       </v-col>
       <v-col cols="6">
-        <v-toolbar dense></v-toolbar>
+        <v-toolbar dense>
+          <v-chip class="ma-2" color="green" text-color="white">
+            <v-avatar left>
+              <v-icon>mdi-checkbox-marked-circle</v-icon>
+            </v-avatar>200 Success
+          </v-chip>
+        </v-toolbar>
       </v-col>
     </v-row>
   </v-container>
