@@ -4,8 +4,8 @@
       <v-list>
         <v-list-item link>
           <v-list-item-content>
-            <v-list-item-title class="title">B站相关接口</v-list-item-title>
-            <v-list-item-subtitle>https://www.bilibili.com</v-list-item-subtitle>
+            <v-list-item-title class="title">Quest</v-list-item-title>
+            <v-list-item-subtitle>Quest REST Client</v-list-item-subtitle>
           </v-list-item-content>
 
           <v-list-item-action>
@@ -148,7 +148,7 @@ export default {
   },
   methods: {
     createNewRequest () {
-      this.$db.read().get('requests').insert({ title: this.newRequestName }).write()
+      this.$db.read().get('requests').insert({ title: this.newRequestName, method: 'GET', headers: [{ 'name': 'User-Agent', 'value': 'Quest' }] }).write()
       this.newRequestName = ''
       this.requests = this.$db.read().get('requests').value()
       this.dialog = false
