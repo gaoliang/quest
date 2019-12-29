@@ -25,13 +25,12 @@
           :key="request.id"
           :to="{ name: 'main', params: { requestId: request.id, request,  requests }}"
           @click.right="show($event, request.id)"
+          @dblclick="saveRequest(request)"
           class="px-2"
         >
           <v-list-item-content>
             <v-list-item-title>
-              <span v-if="changedRequest.has(request.id)">
-●
-              </span>
+              <span v-if="changedRequest.has(request.id)">●</span>
               {{ request.title }}
             </v-list-item-title>
             <v-list-item-subtitle>
@@ -106,11 +105,13 @@
 </template>
 
 <script>
+let _ = require('lodash')
+
 export default {
   name: 'Drawer',
   mounted () {
-    this.requests = this.$db.read().get('requests').value()
     this.savedRequest = this.$db.read().get('requests').value()
+    this.requests = this.$db.read().get('requests').value()
   },
   computed: {
     // 从上次读取开始发生了变化的request id
@@ -119,7 +120,7 @@ export default {
       for (let index = 0; index < this.requests.length; index++) {
         const element = this.requests[index]
         const savedElement = this.savedRequest[index]
-        if (JSON.stringify(element) !== JSON.stringify(savedElement)) {
+        if (!_.isEqual(element, savedElement)) {
           set1.add(element.id)
         }
       }
@@ -132,6 +133,7 @@ export default {
       newRequestName: '',
       currentActionRequestId: '',
       requests: [],
+      savedRequest: [],
       showMenu: false,
       x: 0,
       y: 0,
@@ -150,6 +152,11 @@ export default {
       this.newRequestName = ''
       this.requests = this.$db.read().get('requests').value()
       this.dialog = false
+    },
+    saveRequest (request) {
+      console.log('save request: ', request)
+      this.$db.get('requests').find({ id: request.id }).assign(request).write()
+      this.savedRequest = this.$db.read().get('requests').value()
     },
     deleteRequest () {
       console.log('delete request: ' + this.currentActionRquestId)
