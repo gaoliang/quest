@@ -69,9 +69,9 @@
                         v-model="request.body.value"
                         @init="editorInit"
                         lang="json"
-                        theme="tomorrow_night_eighties"
+                        :theme="$vuetify.theme.dark ? 'tomorrow_night_eighties': 'tomorrow'"
                         height="100"
-                      ></editor>
+                      />
                     </v-container>
                   </v-tab-item>
                 </v-tabs>
@@ -93,13 +93,50 @@
           <v-row dense>
             <v-col :cols="12">
               <v-card>
-                <editor
-                  :value="request.response.data"
-                  @init="editorInit"
-                  lang="html"
-                  theme="tomorrow_night_eighties"
-                  height="500px"
-                ></editor>
+                <v-tabs show-arrows class="pt-2 pl-2 pr-2">
+                  <v-tab key="body" class="px-2">Body</v-tab>
+                  <v-tab key="headers" class="px-2">Header</v-tab>
+                  <v-tab-item key="body">
+                    <v-col class="d-flex" cols="12" sm="6">
+                      <v-select
+                        v-model="extension"
+                        :items="extensions"
+                        outlined
+                        dense
+                      />
+                    </v-col>
+
+                    <v-container v-if="request.response">
+                      <editor
+                        :value="typeof request.response.data == 'string'? request.response.data :JSON.stringify(request.response.data )"
+                        @init="editorInit"
+                        :lang="extension"
+                        :theme="$vuetify.theme.dark ? 'tomorrow_night_eighties': 'tomorrow'"
+                        height="500px"
+                      />
+                    </v-container>
+                  </v-tab-item>
+                  <v-tab-item key="headers">
+                    <v-container>
+                      <v-simple-table dense>
+                        <template v-slot:default>
+                          <thead>
+                          <tr>
+                            <th class="text-left">Name</th>
+                            <th class="text-left">Value</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr v-for="(value, name) in request.response.headers" :key="name">
+                            <td>{{ name }}</td>
+                            <td>{{ value }}</td>
+                          </tr>
+                          </tbody>
+                        </template>
+                      </v-simple-table>
+                    </v-container>
+                  </v-tab-item>
+                </v-tabs>
               </v-card>
             </v-col>
           </v-row>
@@ -111,7 +148,11 @@
 
 <script>
 import { commonHeaders } from '@/utils/common'
+const mime = require('mime')
 export default {
+  mounted () {
+    this.request = this.$route.params.request
+  },
   watch: {
     '$route' (to, from) {
       console.log(to)
@@ -129,6 +170,7 @@ export default {
       require('brace/mode/json') // language
       require('brace/mode/less')
       require('brace/theme/tomorrow_night_eighties')
+      require('brace/theme/tomorrow')
       require('brace/snippets/json') // snippet
     },
     addHeader () {
@@ -138,12 +180,20 @@ export default {
       this.request.headers.splice(index, 1)
     },
     doRequest () {
+      this.$axios.defaults.headers.common = []
       let that = this
       this.loading = true
+      var headers = this.request.headers.reduce(function (map, obj) {
+        map[obj.name] = obj.value
+        return map
+      }, {})
+
+      console.log(headers)
 
       this.$axios({
         method: this.request.method,
         url: this.request.url,
+        headers: headers,
         // change valid status code. defalut is 200-300
         validateStatus: function (status) {
           return status >= 0
@@ -152,6 +202,7 @@ export default {
         console.log(response.headers)
         console.log(response)
         that.loading = false
+        that.extension = mime.getExtension(response.headers['content-type'])
         that.$set(that.request, 'response', response)
       })
     }
@@ -160,6 +211,13 @@ export default {
     return {
       commonHeaders,
       loading: false,
+      extension: 'text',
+      extensions: [
+        'json',
+        'html',
+        'xml',
+        'text'
+      ],
       items: [
         'GET',
         'POST',
@@ -169,7 +227,12 @@ export default {
         'HEAD',
         'OPTIONS'
       ],
-      request: {}
+      request: {
+        'url': '',
+        'method': '',
+        'headers': [],
+        'body': { 'type': '', 'value': '' }
+      }
     }
   }
 }

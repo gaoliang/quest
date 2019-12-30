@@ -1,12 +1,18 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from '../views/Main.vue'
+import HelloWorld from '../components/HelloWorld'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/:requestId',
+    path: '/',
+    name: 'home',
+    component: HelloWorld
+  },
+  {
+    path: '/main/:requestId',
     name: 'main',
     component: Main
   },

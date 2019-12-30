@@ -111,6 +111,8 @@ export default {
   mounted () {
     this.savedRequest = this.$db.read().get('requests').value()
     this.requests = this.$db.read().get('requests').value()
+    // let request = this.requests[0]
+    // this.$router.push({ name: 'main', params: { requestId: request.id, request, requests: this.requests } })
   },
   computed: {
     // 从上次读取开始发生了变化的request id
@@ -140,12 +142,6 @@ export default {
       showMenu: false,
       x: 0,
       y: 0,
-      popupItems: [
-        { title: 'Click Me' },
-        { title: 'Click Me' },
-        { title: 'Click Me' },
-        { title: 'Click Me 2' }
-      ],
       right: null
     }
   },
