@@ -5,6 +5,8 @@ import {
   createProtocol,
   installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
+
+import axios from 'axios'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -90,3 +92,9 @@ if (isDevelopment) {
     })
   }
 }
+
+// change valid status code. defalut is 200-300
+axios.defaults.validateStatus = function (status) {
+  return status >= 0
+}
+global.axios = axios

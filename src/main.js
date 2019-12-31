@@ -6,12 +6,14 @@ import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import vuetify from './plugins/vuetify'
 import db from './server/dbstore'
-import axios from 'axios'
 
 Vue.config.productionTip = false
 
 Vue.use(Antd)
 Vue.prototype.$db = db
+
+// use axios in main process
+const axios = require('electron').remote.getGlobal('axios')
 Vue.prototype.$axios = axios
 
 new Vue({

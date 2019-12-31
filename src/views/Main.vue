@@ -82,7 +82,7 @@
       </v-col>
       <v-col cols="6">
         <v-toolbar dense>
-          <v-chip class="ma-2" color="green" text-color="white" v-if="request.response && !loading">
+          <v-chip class="ma-2" :color="request.response.status|httpStatusCodeToTheme" text-color="white" v-if="request.response && !loading">
             <v-avatar left>
               <v-icon>mdi-checkbox-marked-circle</v-icon>
             </v-avatar>
@@ -92,14 +92,14 @@
         <v-container fluid>
           <v-row dense>
             <v-col :cols="12">
-              <v-card>
+              <v-card v-if="request.response">
                 <v-tabs show-arrows class="pt-2 pl-2 pr-2">
                   <v-tab key="body" class="px-2">Body</v-tab>
                   <v-tab key="headers" class="px-2">Header</v-tab>
                   <v-tab-item key="body">
                     <v-col class="d-flex" cols="12" sm="6">
                       <v-select
-                        v-model="extension"
+                        v-model="request.response.extension"
                         :items="extensions"
                         outlined
                         dense
@@ -110,7 +110,7 @@
                       <editor
                         :value="typeof request.response.data == 'string'? request.response.data :JSON.stringify(request.response.data )"
                         @init="editorInit"
-                        :lang="extension"
+                        :lang="request.response.extension"
                         :theme="$vuetify.theme.dark ? 'tomorrow_night_eighties': 'tomorrow'"
                         height="500px"
                       />
@@ -194,17 +194,31 @@ export default {
         method: this.request.method,
         url: this.request.url,
         headers: headers,
-        // change valid status code. defalut is 200-300
-        validateStatus: function (status) {
-          return status >= 0
-        }
-      }).then(response => {
-        console.log(response.headers)
-        console.log(response)
-        that.loading = false
-        that.extension = mime.getExtension(response.headers['content-type'])
-        that.$set(that.request, 'response', response)
-      })
+        data: this.request.body.value
+      }).then(
+        response => {
+          that.loading = false
+          that.$set(that.request, 'response', {
+            data: response.data,
+            extension: mime.getExtension(response.headers['content-type']),
+            headers: response.headers,
+            status: response.status,
+            statusText: response.statusText
+          })
+        }, err => {
+          console.log(err)
+          that.loading = false
+          that.$set(that.request, 'response', {})
+        })
+    }
+  },
+  filters: {
+    httpStatusCodeToTheme (code) {
+      if (code < 200) return 'info'
+      if (code < 300) return 'success'
+      if (code < 400) return 'warning'
+      if (code < 600) return 'error'
+      return 'info'
     }
   },
   data () {
