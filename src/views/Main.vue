@@ -108,7 +108,7 @@
 
                     <v-container v-if="request.response">
                       <editor
-                        :value="typeof request.response.data == 'string'? request.response.data :JSON.stringify(request.response.data )"
+                        :value="typeof request.response.data == 'string'? request.response.data :JSON.stringify(request.response.data, null, 2)"
                         @init="editorInit"
                         :lang="request.response.extension"
                         :theme="$vuetify.theme.dark ? 'tomorrow_night_eighties': 'tomorrow'"

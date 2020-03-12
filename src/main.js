@@ -12,7 +12,7 @@ Vue.config.productionTip = false
 Vue.use(Antd)
 Vue.prototype.$db = db
 
-// use axios in main process
+// use axios in main process, so no browser limit.
 const axios = require('electron').remote.getGlobal('axios')
 Vue.prototype.$axios = axios
 
