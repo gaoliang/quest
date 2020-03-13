@@ -21,14 +21,14 @@ export default {
   },
   mounted () {
     // change system color
-    if (
-      window.matchMedia('(prefers-color-scheme: light)').matches ||
-      window.matchMedia('(prefers-color-scheme: no-preference)').matches
-    ) {
-      this.$vuetify.theme.dark = false
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      this.$vuetify.theme.dark = true
-    }
+    // if (
+    //   window.matchMedia('(prefers-color-scheme: light)').matches ||
+    //   window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    // ) {
+    //   this.$vuetify.theme.dark = false
+    // } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    //   this.$vuetify.theme.dark = true
+    // }
   },
   methods: {
   },

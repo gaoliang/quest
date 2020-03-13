@@ -82,7 +82,12 @@
       </v-col>
       <v-col cols="6">
         <v-toolbar dense>
-          <v-chip class="ma-2" :color="request.response.status|httpStatusCodeToTheme" text-color="white" v-if="request.response && !loading">
+          <v-chip
+            class="ma-2"
+            :color="request.response.status|httpStatusCodeToTheme"
+            text-color="white"
+            v-if="request.response && !loading"
+          >
             <v-avatar left>
               <v-icon>mdi-checkbox-marked-circle</v-icon>
             </v-avatar>
@@ -121,16 +126,16 @@
                       <v-simple-table dense>
                         <template v-slot:default>
                           <thead>
-                          <tr>
-                            <th class="text-left">Name</th>
-                            <th class="text-left">Value</th>
-                          </tr>
+                            <tr>
+                              <th class="text-left">Name</th>
+                              <th class="text-left">Value</th>
+                            </tr>
                           </thead>
                           <tbody>
-                          <tr v-for="(value, name) in request.response.headers" :key="name">
-                            <td>{{ name }}</td>
-                            <td>{{ value }}</td>
-                          </tr>
+                            <tr v-for="(value, name) in request.response.headers" :key="name">
+                              <td>{{ name }}</td>
+                              <td>{{ value }}</td>
+                            </tr>
                           </tbody>
                         </template>
                       </v-simple-table>
@@ -154,7 +159,7 @@ export default {
     this.request = this.$route.params.request
   },
   watch: {
-    '$route' (to, from) {
+    $route (to, from) {
       console.log(to)
       this.request = to.params.request
       console.log(to.params.requests)
@@ -174,7 +179,7 @@ export default {
       require('brace/snippets/json') // snippet
     },
     addHeader () {
-      this.request.headers.push({ 'name': '', 'value': '' })
+      this.request.headers.push({ name: '', value: '' })
     },
     deleteHeader (index) {
       this.request.headers.splice(index, 1)
@@ -205,11 +210,13 @@ export default {
             status: response.status,
             statusText: response.statusText
           })
-        }, err => {
+        },
+        err => {
           console.log(err)
           that.loading = false
           that.$set(that.request, 'response', {})
-        })
+        }
+      )
     }
   },
   filters: {
@@ -226,26 +233,13 @@ export default {
       commonHeaders,
       loading: false,
       extension: 'text',
-      extensions: [
-        'json',
-        'html',
-        'xml',
-        'text'
-      ],
-      items: [
-        'GET',
-        'POST',
-        'PUT',
-        'DELETE',
-        'PATCH',
-        'HEAD',
-        'OPTIONS'
-      ],
+      extensions: ['json', 'html', 'xml', 'text'],
+      items: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
       request: {
-        'url': '',
-        'method': '',
-        'headers': [],
-        'body': { 'type': '', 'value': '' }
+        url: '',
+        method: '',
+        headers: [],
+        body: { type: '', value: '' }
       }
     }
   }

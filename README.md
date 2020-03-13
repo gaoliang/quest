@@ -8,7 +8,8 @@ It is still in its early stages of development
 3. Developed using electron, vue.js and axios for easy extension
 
 ## Screenshots
-
+![screenshot1](docs/images/screenshot1.png)
+![screenshot1](docs/images/screenshot2.png)
 ## Project setup
 ```
 yarn install
